@@ -16,7 +16,8 @@ add_executable(WR-gui
   ../imgui/imgui_demo.cpp
   src/main.cpp
   src/control.cpp
-  src/map.cpp)
+  src/map.cpp
+  src/steering.cpp)
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})

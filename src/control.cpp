@@ -42,6 +42,14 @@ LogData parseLog(std::string line) {
     logData.type = LogData::WRTarget;
     logData.data.pos = parsePosition(tokens.at(2), tokens.at(3));
     break;
+  case THROTTLE:
+    logData.type = LogData::throttle;
+    logData.data.throttle = std::stof(tokens.at(2));
+    break;
+  case  NOZZLE_ANGLE:
+    logData.type = LogData::nozzle_angle;
+    logData.data.nozzle_angle = std::stof(tokens.at(2));
+    break;
   default: throw std::runtime_error("Bad type character");
   }
   return logData;

@@ -4,7 +4,7 @@ void mapWidget() {
   static bool trackWR = false;
   static bool trackLC = false;
   static struct {
-    float scale = 5.0;
+    float scale = 3.6;
     ImVec2 origin;
   } mapView;
   const float wrSize = 5.0;
@@ -12,7 +12,7 @@ void mapWidget() {
   ImGui::Begin("WR / LC Map");
     
   ImDrawList* draw_list = ImGui::GetWindowDrawList();
-  if (ImGui::Button("Center")) mapView.origin = ImVec2(669975.5563621983,6395606.2994977264); ImGui::SameLine();
+  if (ImGui::Button("Center")) mapView.origin = ImVec2(669855.875, 6395646.5); ImGui::SameLine();
   //if (ImGui::Button("Center")) {
   //  mapView.origin = ImVec2(state.map.bBox.x.min + ((state.map.bBox.x.max - state.map.bBox.x.min) / 2),
   //			    state.map.bBox.y.min + ((state.map.bBox.y.max - state.map.bBox.y.min) / 2));
@@ -21,7 +21,7 @@ void mapWidget() {
   if (ImGui::Checkbox("Track WR", &trackWR)) trackLC = false;
 
   ImGui::Text("Scale: %f  Origin: (%f, %f)", mapView.scale, mapView.origin.x, mapView.origin.y);
-  ImGui::DragFloat("Scale", &mapView.scale, 0.2f, 1.0f, 72.0f, "%.01f");
+  ImGui::DragFloat("Scale", &mapView.scale, 0.2f, 0.1f, 72.0f, "%.01f");
   ImGui::DragFloat("Heading", &state.latest.WRHeading, 0.01f, -PI, PI, "%.3f");
     
   ImVec2 canvas_pos = ImGui::GetCursorScreenPos();
@@ -57,17 +57,19 @@ void mapWidget() {
   bool first_LCPos = true, first_WRPos = true;
   static LogData *pLog_WRHeading;
   static LogData *pLog_WRTarget;
+
+  auto mapAdjust = [&](ImVec2 *c) {
+    return ImVec2((c->x - origin.x) * mapView.scale + canvas_pos.x + canvas_size.x / 2,
+		  -(c->y - origin.y) * mapView.scale + canvas_pos.y + canvas_size.y / 2);
+  };
   
   for (auto it = logData.begin(); it != logData.end() && state.time >= it->timestamp; it++) {
     
     if (it->type == LogData::LCPos || it->type == LogData::WRPos || it->type == LogData::WRTarget)
-      this_Pos = ImVec2((it->data.pos.x - origin.x) * mapView.scale + canvas_pos.x + canvas_size.x / 2,
-			-(it->data.pos.y - origin.y) * mapView.scale + canvas_pos.y + canvas_size.y / 2);
+      this_Pos = mapAdjust(&(it->data.pos));
     
     switch (it->type) {
     case LogData::LCPos:
-      // this_Pos = ImVec2((it->data.pos.x - origin.x) * mapView.scale + canvas_pos.x + canvas_size.x / 2,
-      // 		-(it->data.pos.y - origin.y) * mapView.scale + canvas_pos.y + canvas_size.y / 2);
       draw_list->AddCircleFilled(this_Pos, 3.0f, im_borderColor, 20);
       if
 	(first_LCPos) first_LCPos = false;
@@ -77,8 +79,6 @@ void mapWidget() {
       break;
       
     case LogData::WRPos:
-      // this_Pos = ImVec2((it->data.pos.x - origin.x) * mapView.scale + canvas_pos.x + canvas_size.x / 2,
-      //		-(it->data.pos.y - origin.y) * mapView.scale + canvas_pos.y + canvas_size.y / 2);
       if (first_WRPos)
 	first_WRPos = false;
       else
@@ -93,8 +93,12 @@ void mapWidget() {
     case LogData::WRTarget:
       pLog_WRTarget = &(*it);
       break;
-
     }
+  }
+
+  // Draw targets != (0, 0)
+  if (pLog_WRTarget && pLog_WRTarget->data.pos.x > 0.1 && pLog_WRTarget->data.pos.y > 0.1) {
+    draw_list->AddLine(state.latest.WRPos, mapAdjust(&pLog_WRTarget->data.pos), im_red, 1.0);
   }
 
   // Update state

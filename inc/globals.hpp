@@ -7,6 +7,7 @@
 extern const ImColor im_canvasColor;
 extern const ImColor im_borderColor;
 extern const ImColor im_focusColor;
+extern const ImColor im_red;
 extern const sf::Color sf_bgColor;
 
 struct State {
@@ -31,11 +32,15 @@ struct LogData {
     LCPos,
     WRPos,
     WRHeading,
-    WRTarget
+    WRTarget,
+    throttle,
+    nozzle_angle
   } type;
   union {
     ImVec2 pos;
     float heading;
+    float throttle;
+    float nozzle_angle;
   } data;
 };
 

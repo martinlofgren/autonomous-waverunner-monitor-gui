@@ -12,10 +12,12 @@
 #include "globals.hpp"
 #include "control.hpp"
 #include "map.hpp"
+#include "steering.hpp"
 
 const ImColor im_canvasColor(0xf1, 0xf2, 0xf3, 0xff);
 const ImColor im_borderColor(0x58, 0x5a, 0x56, 0xff);
 const ImColor im_focusColor(0x81, 0xa3, 0xa7, 0xff);
+const ImColor im_red(0xf1, 0, 0, 0xff);
 const sf::Color sf_bgColor(0xc2, 0xd3, 0xda);
 
 /*
@@ -48,6 +50,7 @@ int main() {
     ImGui::ShowDemoWindow();
     controlWidget();
     mapWidget();
+    steeringWidget();
 
     window.clear(sf_bgColor);
     ImGui::SFML::Render(window);

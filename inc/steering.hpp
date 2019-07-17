@@ -8,16 +8,10 @@
 #include <iterator>
 #include <stdexcept>
 #include <iostream>
+#include <math.h>
 
 #include "imgui.h"
 
 #include "globals.hpp"
 
-#define LCPOS 'A'
-#define WRPOS 'B'
-#define WRHEADING 'C'
-#define WRTARGET 'D'
-#define THROTTLE 'P'
-#define NOZZLE_ANGLE 'Q'
-
-void controlWidget();
+void steeringWidget();
