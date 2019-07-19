@@ -3,11 +3,15 @@
 #include <vector>
 
 #include "imgui.h"
+
+#ifdef LINUX
+#define ARCH "Linux"
 #include "imgui-SFML.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
+#endif
 
 #include "globals.hpp"
 #include "control.hpp"
@@ -28,7 +32,7 @@ State state;
 std::vector<LogData> logData;
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(640, 480), "WaveRunner monitoring / diagnostics tool");
+  sf::RenderWindow window(sf::VideoMode(640, 480), "WaveRunner monitoring / diagnostics tool (" ARCH ")");
   window.setVerticalSyncEnabled(true);
   ImGui::SFML::Init(window);
 
