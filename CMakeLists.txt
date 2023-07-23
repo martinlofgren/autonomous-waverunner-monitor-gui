@@ -3,6 +3,8 @@ project (WR-gui)
 
 cmake_policy(SET CMP0072 NEW)
 
+add_definitions(-DIMGUI_USER_CONFIG config.hpp)
+
 # Dear IMGUI and the main app are the same for all platforms
 add_library(imgui STATIC
   ./lib/imgui/imgui.cpp

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "imgui.h"
+#include "config.hpp"
 
 #ifdef LINUX
 #define ARCH "Linux"
